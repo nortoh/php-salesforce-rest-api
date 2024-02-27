@@ -99,7 +99,18 @@ class Client {
    * @throws SalesforceException CREATE_FAILED on failure
    */
   public function create(SalesforceObject $object) : SalesforceObject {
-    $response = $this->request("POST", "/sobjects/{$object->type()}", ["json" => $object->toArray()]);
+    $headers = [];
+
+    // if the object type is a comment, assign a header
+    // that prevents SF from auto-assigning
+    // @see MAD-12977
+    if ($object->type() === 'comment') {
+      $headers = [
+        'Sforce-Auto-Assign' => 'FALSE'
+      ];
+    }
+
+    $response = $this->request("POST", "/sobjects/{$object->type()}", ["json" => $object->toArray(), "headers" => $headers]);
     if ($response->getStatusCode() !== self::HTTP_CREATED) {
       throw SalesforceException::create(
         SalesforceException::CREATE_FAILED,
