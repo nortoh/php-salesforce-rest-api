@@ -98,9 +98,7 @@ class CRUD
         // that prevents SF from auto-assigning
         // @see MAD-12977
         if ($object === 'Comment__c') {
-            $headers += [
-                'Sforce-Auto-Assign' => 'FALSE'
-            ];
+            $headers['Sforce-Auto-Assign'] = 'FALSE';
         }
 
         $request = $client->request('POST', $url, [
