@@ -101,10 +101,10 @@ class Client {
   public function create(SalesforceObject $object) : SalesforceObject {
     $headers = [];
 
-    // if the object type is a comment, assign a header
+    // if the object type is a Comment__c, assign a header
     // that prevents SF from auto-assigning
     // @see MAD-12977
-    if ($object->type() === 'comment') {
+    if ($object->type() === 'Comment__c') {
       $headers = [
         'Sforce-Auto-Assign' => 'FALSE'
       ];
